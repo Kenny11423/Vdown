@@ -10,7 +10,6 @@ from downloader.utils import (
     format_duration,
     format_size,
     extract_available_qualities,
-    check_ffmpeg,
 )
 
 

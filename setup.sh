@@ -102,8 +102,8 @@ else
     # Setup Virtual Environment
     echo "Setting up Python virtual environment..."
     python3 -m venv "$SCRIPT_DIR/venv"
-    "$SCRIPT_DIR/venv/bin/pip" install --upgrade pip -q
     "$SCRIPT_DIR/venv/bin/pip" install -r "$SCRIPT_DIR/requirements.txt" -q
+    "$SCRIPT_DIR/venv/bin/pip" install curl-cffi -q 2>/dev/null || true
     echo "Dependencies installed in virtualenv."
 
     chmod +x "$SCRIPT_DIR/vdown"
