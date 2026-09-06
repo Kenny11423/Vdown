@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 from typing import Optional
 import yt_dlp
 from yt_dlp.utils import DownloadError
@@ -174,24 +175,41 @@ class VideoDownloader:
             if self.has_ffmpeg:
                 opts["merge_output_format"] = "mp4"
 
-        last_status_line_len = 0
+        last_update_time = 0.0
 
         def progress_hook(d):
-            nonlocal last_status_line_len
+            nonlocal last_update_time
             status = d.get("status")
+            info_dict = d.get("info_dict", {})
+            vcodec = info_dict.get("vcodec")
+            acodec = info_dict.get("acodec")
+            
+            if audio_only or (vcodec == "none" and acodec and acodec != "none"):
+                prefix = "[Audio]"
+            elif acodec == "none" and vcodec and vcodec != "none":
+                prefix = "[Video]"
+            else:
+                prefix = "[Media]"
+
+            bar_len = 16
+            total = d.get("total_bytes") or d.get("total_bytes_estimate") or 0
+
             if status == "downloading":
+                now = time.time()
                 downloaded = d.get("downloaded_bytes", 0)
-                total = d.get("total_bytes") or d.get("total_bytes_estimate") or 0
+                if (now - last_update_time < 0.1) and (downloaded < total):
+                    return
+                last_update_time = now
+
                 speed = d.get("speed") or 0
                 eta = d.get("eta")
 
-                pct = f"{(downloaded / total * 100):.1f}%" if total else "N/A"
+                pct = f"{(downloaded / total * 100):5.1f}%" if total else " N/A "
                 dl_mb = f"{downloaded / (1024 * 1024):.1f}"
-                tot_mb = f"{total / (1024 * 1024):.1f}MB" if total else "N/A"
-                spd_mb = f"{speed / (1024 * 1024):.1f}MB/s" if speed else "N/A"
+                tot_mb = f"{total / (1024 * 1024):.1f}M" if total else "N/A"
+                spd_mb = f"{speed / (1024 * 1024):.1f}M/s" if speed else "N/A"
                 eta_s = f"{int(eta)}s" if eta is not None else "N/A"
 
-                bar_len = 24
                 if total:
                     filled = min(bar_len, int(bar_len * downloaded / total))
                     arrow = ">" if filled < bar_len else ""
@@ -199,13 +217,13 @@ class VideoDownloader:
                 else:
                     bar = " " * bar_len
 
-                line = f"\rDownloading: [{bar}] {pct:>6} | {dl_mb}/{tot_mb} | {spd_mb:>9} | ETA {eta_s:>4}"
-                last_status_line_len = len(line)
-                sys.stdout.write(line)
+                line = f"\r{prefix} [{bar}] {pct} | {dl_mb}/{tot_mb} | {spd_mb:>8} | ETA {eta_s:>3}"
+                sys.stdout.write(f"{line}\033[K")
                 sys.stdout.flush()
 
             elif status == "finished":
-                sys.stdout.write("\n")
+                tot_mb = f"{total / (1024 * 1024):.1f}M" if total else ""
+                sys.stdout.write(f"\r{prefix} [{'=' * bar_len}] 100.0% | {tot_mb} | Done\033[K\n")
                 sys.stdout.flush()
 
         def postprocessor_hook(d):
