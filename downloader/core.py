@@ -65,8 +65,9 @@ class VideoDownloader:
             "quiet": True,
             "no_warnings": True,
             "noprogress": True,
+            "overwrites": True,
             "logger": DownloaderLogger(),
-            "outtmpl": os.path.join(self.output_dir, "%(title).150B [%(id)s].%(ext)s"),
+            "outtmpl": os.path.join(self.output_dir, "%(title).150B [%(id)s] [%(resolution)s].%(ext)s"),
             "windowsfilenames": True,
             "retries": 10,
             "fragment_retries": 10,
@@ -150,6 +151,7 @@ class VideoDownloader:
 
         if audio_only:
             opts["format"] = "bestaudio/best"
+            opts["outtmpl"] = os.path.join(self.output_dir, "%(title).150B [%(id)s] [audio].%(ext)s")
             opts["postprocessors"] = [
                 {
                     "key": "FFmpegExtractAudio",
@@ -159,6 +161,7 @@ class VideoDownloader:
             ]
         elif format_id:
             opts["format"] = f"{format_id}+bestaudio/best/{format_id}"
+            opts["outtmpl"] = os.path.join(self.output_dir, f"%(title).150B [%(id)s] [{format_id}].%(ext)s")
             if self.has_ffmpeg:
                 opts["merge_output_format"] = "mp4"
         elif height:
@@ -168,10 +171,12 @@ class VideoDownloader:
                 f"best[height<={height}][ext=mp4]/"
                 f"best[height<={height}]/best"
             )
+            opts["outtmpl"] = os.path.join(self.output_dir, f"%(title).150B [%(id)s] [{height}p].%(ext)s")
             if self.has_ffmpeg:
                 opts["merge_output_format"] = "mp4"
         else:
             opts["format"] = "bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best[ext=mp4]/best"
+            opts["outtmpl"] = os.path.join(self.output_dir, "%(title).150B [%(id)s] [%(resolution)s].%(ext)s")
             if self.has_ffmpeg:
                 opts["merge_output_format"] = "mp4"
 
