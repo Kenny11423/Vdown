@@ -4,7 +4,15 @@ from typing import Optional
 import yt_dlp
 from yt_dlp.utils import DownloadError
 
-from downloader.utils import check_js_runtime, check_ffmpeg
+from downloader.utils import check_js_runtime, check_ffmpeg, find_zen_browser_profile
+
+# Check for curl_cffi for Cloudflare TLS impersonation
+try:
+    import curl_cffi
+    from yt_dlp.networking.impersonate import ImpersonateTarget
+    HAS_CURL_CFFI = True
+except ImportError:
+    HAS_CURL_CFFI = False
 
 
 class DownloaderLogger:
@@ -39,11 +47,13 @@ class VideoDownloader:
         output_dir: Optional[str] = None,
         cookies_browser: Optional[str] = None,
         cookies_file: Optional[str] = None,
+        impersonate: Optional[str] = None,
     ):
         default_dir = os.path.expanduser("~/Downloads")
         self.output_dir = os.path.abspath(os.path.expanduser(output_dir)) if output_dir else default_dir
         self.cookies_browser = cookies_browser
         self.cookies_file = cookies_file
+        self.impersonate = impersonate
         
         os.makedirs(self.output_dir, exist_ok=True)
         self.js_runtime, _ = check_js_runtime()
@@ -73,12 +83,38 @@ class VideoDownloader:
             opts["js_runtimes"] = {self.js_runtime: {}}
             opts["remote_components"] = {"ejs:github"}
 
-        if self.cookies_browser:
+        # Enable TLS impersonation for Cloudflare bypass if curl_cffi is available
+        if HAS_CURL_CFFI:
+            target_client = self.impersonate or "chrome"
+            try:
+                opts["impersonate"] = ImpersonateTarget(client=target_client)
+            except Exception:
+                pass
+
+        if self.cookies_browser in ("zen", "zen-browser"):
+            zen_profile = find_zen_browser_profile()
+            if zen_profile:
+                opts["cookiesfrombrowser"] = ("firefox", zen_profile, None, None)
+            else:
+                print("[Warning] Could not find Zen Browser profile directory.")
+        elif self.cookies_browser:
             opts["cookiesfrombrowser"] = (self.cookies_browser, None, None, None)
         elif self.cookies_file and os.path.isfile(self.cookies_file):
             opts["cookiefile"] = self.cookies_file
 
         return opts
+
+    def _print_error_tips(self, err_msg: str):
+        lowered = err_msg.lower()
+        if "cloudflare" in lowered or "anti-bot" in lowered or "impersonat" in lowered:
+            print("\n[Tip for Cloudflare anti-bot challenge]")
+            if not HAS_CURL_CFFI:
+                print("  1. Linux/PC: Install curl-cffi to bypass Cloudflare TLS checks:")
+                print("     pip install curl-cffi")
+            print("  2. iSH on iOS: Open the video link in your browser to pass Cloudflare,")
+            print("     then pass cookies with: --cookies chrome (or --cookies-file cookies.txt)")
+        elif "login" in lowered or "bot" in lowered:
+            print("Tip: If the video is restricted or requires login, try: --cookies chrome")
 
     def get_info(self, url: str) -> Optional[dict]:
         """Fetch video metadata and available formats without downloading."""
@@ -91,8 +127,7 @@ class VideoDownloader:
         except DownloadError as e:
             err_msg = str(e)
             print(f"\n[Error] Unable to fetch video info: {err_msg}")
-            if "login" in err_msg.lower() or "bot" in err_msg.lower():
-                print("Tip: If the video is restricted or requires login, try: --cookies chrome")
+            self._print_error_tips(err_msg)
             return None
         except Exception as e:
             print(f"\n[Error] Unexpected error: {e}")
@@ -203,7 +238,9 @@ class VideoDownloader:
                             downloaded_file = base + ".mp4"
                 return downloaded_file
         except DownloadError as e:
-            print(f"\n[Error] Download failed: {e}")
+            err_msg = str(e)
+            print(f"\n[Error] Download failed: {err_msg}")
+            self._print_error_tips(err_msg)
             return None
         except Exception as e:
             print(f"\n[Error] Unexpected error during download: {e}")

@@ -152,13 +152,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--cookies",
         dest="cookies_browser",
-        choices=["chrome", "firefox", "edge", "brave", "opera", "vivaldi", "chromium"],
-        help="Extract browser cookies for restricted/private videos (e.g. Facebook Reels)",
+        choices=["zen", "zen-browser", "firefox", "chrome", "edge", "brave", "opera", "vivaldi", "chromium"],
+        help="Extract browser cookies (e.g. zen, firefox, chrome) for restricted/private videos",
     )
     parser.add_argument(
         "--cookies-file",
         dest="cookies_file",
         help="Path to cookies.txt file",
+    )
+    parser.add_argument(
+        "--impersonate",
+        dest="impersonate",
+        default=None,
+        help="Client to impersonate to bypass Cloudflare anti-bot (e.g. chrome, safari)",
     )
     parser.add_argument(
         "-i", "--info",
@@ -193,6 +199,7 @@ def main():
         output_dir=args.output_dir,
         cookies_browser=args.cookies_browser,
         cookies_file=args.cookies_file,
+        impersonate=args.impersonate,
     )
 
     if args.info:

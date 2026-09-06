@@ -100,13 +100,19 @@ Workflow:
 | `-q`, `--quality <res>` | Target video quality directly (e.g. `1080`, `720`, `480`, `best`) |
 | `-o`, `--output <dir>` | Destination folder (default: `~/Downloads`) |
 | `-y`, `--yes` | Skip prompts and download best MP4 automatically |
-| `--cookies <browser>` | Read cookies from browser (`chrome`, `firefox`, `edge`, `brave`) |
+| `--cookies <browser>` | Read cookies from browser (`zen`, `firefox`, `chrome`, `edge`, `brave`) |
+| `--impersonate <target>` | Client to impersonate to bypass Cloudflare anti-bot (`chrome`, `safari`) |
 | `-i`, `--info` | Display video details and available qualities without downloading |
 | `-h`, `--help` | Show command help |
 
 ---
 
 ## Examples
+
+- Download with Zen Browser cookies (bypasses Cloudflare / login):
+  ```bash
+  vdown "https://..." --cookies zen
+  ```
 
 - Download MP3 audio directly:
   ```bash
@@ -125,7 +131,7 @@ Workflow:
 
 - Download restricted Facebook Reel with browser cookies:
   ```bash
-  vdown "https://www.facebook.com/reel/..." --cookies chrome
+  vdown "https://www.facebook.com/reel/..." --cookies zen
   ```
 
 - Inspect available qualities without downloading:

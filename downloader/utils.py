@@ -84,6 +84,54 @@ def check_js_runtime() -> tuple[str | None, str | None]:
     return None, None
 
 
+def find_zen_browser_profile() -> str | None:
+    """Locate the active profile directory of Zen Browser (Firefox-based)."""
+    home = os.path.expanduser("~")
+    candidate_roots = [
+        os.path.join(home, ".config", "zen"),
+        os.path.join(home, ".zen"),
+        os.path.join(home, ".var", "app", "app.zen_browser.zen", ".config", "zen"),
+        os.path.join(home, ".var", "app", "app.zen_browser.zen", ".zen"),
+        os.path.join(home, "Library", "Application Support", "zen"),
+        os.path.join(home, "AppData", "Roaming", "zen"),
+    ]
+
+    for root in candidate_roots:
+        if not os.path.isdir(root):
+            continue
+        profiles_ini = os.path.join(root, "profiles.ini")
+        if os.path.isfile(profiles_ini):
+            try:
+                import configparser
+                config = configparser.ConfigParser()
+                config.read(profiles_ini)
+                for sec in config.sections():
+                    if sec.startswith("Install") and config.has_option(sec, "Default"):
+                        rel_path = config.get(sec, "Default")
+                        full_path = os.path.join(root, rel_path)
+                        if os.path.isdir(full_path):
+                            return full_path
+                for sec in config.sections():
+                    if sec.startswith("Profile") and config.get(sec, "Default", fallback="0") == "1":
+                        rel_path = config.get(sec, "Path", fallback="")
+                        is_rel = config.get(sec, "IsRelative", fallback="1") == "1"
+                        full_path = os.path.join(root, rel_path) if is_rel else rel_path
+                        if os.path.isdir(full_path):
+                            return full_path
+            except Exception:
+                pass
+        # Fallback: scan for any directory containing cookies.sqlite
+        try:
+            for item in os.listdir(root):
+                sub = os.path.join(root, item)
+                if os.path.isdir(sub) and os.path.isfile(os.path.join(sub, "cookies.sqlite")):
+                    return sub
+        except Exception:
+            pass
+    return None
+
+
+
 def extract_available_qualities(info: dict) -> list[dict]:
     """
     Extract unique video qualities from the video formats.
