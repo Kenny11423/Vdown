@@ -41,7 +41,7 @@ Compatible with standard Linux distributions (Ubuntu, Debian, Arch, Fedora) and 
 
 3. Run the setup script:
    ```sh
-   cd /root/"video downloader"
+   cd "Vdown"
    ./setup.sh
    ```
 
