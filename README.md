@@ -23,7 +23,7 @@ Compatible with standard Linux distributions (Ubuntu, Debian, Arch, Fedora) and 
 
 1. Navigate to the project directory:
    ```bash
-   cd "/home/kennysk/video downloader"
+   cd Vdown
    ```
 
 2. Run the setup script:
@@ -41,7 +41,7 @@ Compatible with standard Linux distributions (Ubuntu, Debian, Arch, Fedora) and 
 
 3. Run the setup script:
    ```sh
-   cd "Vdown"
+   cd Vdown
    ./setup.sh
    ```
 
