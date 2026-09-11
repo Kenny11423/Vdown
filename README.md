@@ -138,3 +138,49 @@ Workflow:
   ```bash
   vdown "https://www.youtube.com/watch?v=..." -i
   ```
+
+---
+
+## Vdown for iOS (Native App / .ipa)
+
+In addition to the CLI, Vdown includes a native iOS app built with SwiftUI. It provides an intuitive mobile interface with background downloading, in-app video playback, direct export to the iOS Photos library, and an in-app browser to capture streams from Cloudflare-protected websites.
+
+### iOS App Highlights
+
+- **Downloader Tab**: Paste any video or audio URL, select format (MP4 / MP3), choose quality (1080p, 720p, 480p, 360p, max audio), and monitor live download progress with real-time speed indicators.
+- **Web Sniffer Tab**: Built-in web browser with automatic media stream detection. Solves Cloudflare Turnstile captchas and login walls directly on device, capturing the stream for instant download.
+- **Files & Library Tab**: Manage downloaded videos and music. Includes built-in AVPlayer, AirDrop / share sheet integration, and a **"Save to Photos"** button for camera roll export.
+- **Native Files App Integration**: `UIFileSharingEnabled` is enabled. All files are directly accessible in the iOS **Files** app under `On My iPhone -> Vdown`.
+
+---
+
+## Automated GitHub Actions IPA Build
+
+The repository includes a GitHub Actions CI/CD workflow (`.github/workflows/build-ipa.yml`) running on macOS Apple Silicon runners (`macos-14`) to build unsigned `.ipa` packages automatically.
+
+### How to Get the `.ipa`
+
+1. **Automatic Workflow**:
+   - Every push to `main` touching `ios/` or `.github/workflows/` automatically triggers the build.
+2. **Manual Trigger**:
+   - Go to the **Actions** tab on GitHub: `https://github.com/Kenny11423/Vdown/actions`
+   - Select **Build iOS IPA** in the left sidebar.
+   - Click **Run workflow** -> choose whether to create a GitHub Release -> click **Run workflow**.
+3. **Download**:
+   - Once completed, click into the workflow run.
+   - Under the **Artifacts** section at the bottom, download `Vdown-iOS-IPA` (contains `Vdown.ipa` and `Vdown.ipa.sha256`).
+
+### How to Install the `.ipa` on iOS
+
+- **TrollStore** (Recommended for iOS 14.0 - 17.0):
+  - Send or download `Vdown.ipa` on your iPhone.
+  - Share/Open in **TrollStore** -> tap **Install**.
+  - No revokes, no 7-day expiration, full entitlements.
+- **AltStore / SideStore**:
+  - Open AltStore -> **My Apps** -> tap `+` -> select `Vdown.ipa`.
+  - Re-signs using your free Apple ID.
+- **Sideloadly** (Windows / macOS):
+  - Connect your iPhone via USB / Wi-Fi.
+  - Drag and drop `Vdown.ipa` into Sideloadly and click **Start**.
+- **Scarlet / LiveContainer**:
+  - Directly import and run `Vdown.ipa`.

@@ -1,0 +1,346 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		854B485CFEE1A71381964CE0 /* VdownApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11E5CFED8481F043C5D75CF /* VdownApp.swift */; };
+		8A0C9AC615A5429CEBBE5078 /* VideoQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27774519AEA662F74180F80E /* VideoQuality.swift */; };
+		D4ABE8B15AE0655A05C197D4 /* DownloadItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E0DAE9E92364430603ED22 /* DownloadItem.swift */; };
+		FA87BE9859F911D11C9809DC /* LocalMediaFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0054F854AD89F8116DA8339 /* LocalMediaFile.swift */; };
+		D33C5F4825743F2FF2DC94F7 /* VideoExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA4687E6DB18C4841233107 /* VideoExtractor.swift */; };
+		6A304985EAEC7806F7087691 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40698B1F2511796808054833 /* DownloadManager.swift */; };
+		CC06AA9255032224573D4CDC /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3F153F5B84A6F7E43C183D /* ShareSheet.swift */; };
+		BF8C8ACE90B831C1CDEC9815 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBEF0A172C0CAA66095124E /* VideoPlayerView.swift */; };
+		7FA9C6AC1A992C0FC8C293BF /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE6DA242110FD4C5D2DE7E79 /* MainView.swift */; };
+		E04FA10A44AA3BB07A78113D /* HomeDownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4DE5DFF2F7F728D1D3A4FE /* HomeDownloadView.swift */; };
+		E728A8D9C735D174D7E9CD51 /* DownloadsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E3F9F9A99FF66DC986F925 /* DownloadsListView.swift */; };
+		5C5D97FC714406C8968947BE /* WebSnifferView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDD3C65DBC38795D1BD81D17 /* WebSnifferView.swift */; };
+		F105AAADBF633898E9BCC064 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E0CC807565B275A206BE43 /* SettingsView.swift */; };
+		FD60B18F35740E63C7036C05 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8DB0280B057574E974D8792 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		ACE032DFB99281B9C6BDD23F /* Vdown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vdown.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D11E5CFED8481F043C5D75CF /* VdownApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VdownApp.swift"; sourceTree = "<group>"; };
+		27774519AEA662F74180F80E /* VideoQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoQuality.swift"; sourceTree = "<group>"; };
+		19E0DAE9E92364430603ED22 /* DownloadItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadItem.swift"; sourceTree = "<group>"; };
+		E0054F854AD89F8116DA8339 /* LocalMediaFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LocalMediaFile.swift"; sourceTree = "<group>"; };
+		4CA4687E6DB18C4841233107 /* VideoExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoExtractor.swift"; sourceTree = "<group>"; };
+		40698B1F2511796808054833 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadManager.swift"; sourceTree = "<group>"; };
+		AD3F153F5B84A6F7E43C183D /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShareSheet.swift"; sourceTree = "<group>"; };
+		FCBEF0A172C0CAA66095124E /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "VideoPlayerView.swift"; sourceTree = "<group>"; };
+		DE6DA242110FD4C5D2DE7E79 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainView.swift"; sourceTree = "<group>"; };
+		CC4DE5DFF2F7F728D1D3A4FE /* HomeDownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeDownloadView.swift"; sourceTree = "<group>"; };
+		11E3F9F9A99FF66DC986F925 /* DownloadsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadsListView.swift"; sourceTree = "<group>"; };
+		EDD3C65DBC38795D1BD81D17 /* WebSnifferView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebSnifferView.swift"; sourceTree = "<group>"; };
+		85E0CC807565B275A206BE43 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
+		A8DB0280B057574E974D8792 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
+		844CEB136277C07ADA98B838 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info.plist"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C92DD416700C675A2583C93A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		016E5C04A36B9E44ADA45781 = {
+			isa = PBXGroup;
+			children = (
+				7DDCBADA68C253C10B4B67C2 /* Vdown */,
+				1BABC9FE70385367B81EC546 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		7DDCBADA68C253C10B4B67C2 /* Vdown */ = {
+			isa = PBXGroup;
+			children = (
+				D11E5CFED8481F043C5D75CF /* VdownApp.swift */,
+				E74C4842E34193B48C4BB865 /* Models */,
+				8BAA9ED26F64CAEA84168990 /* Services */,
+				25486B6C526EF2A81AB1B5C9 /* Components */,
+				575E908655668B293FC62796 /* Views */,
+				35310B5F7B58757F6BE08114 /* Resources */,
+			);
+			path = Vdown;
+			sourceTree = "<group>";
+		};
+		E74C4842E34193B48C4BB865 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				27774519AEA662F74180F80E /* VideoQuality.swift */,
+				19E0DAE9E92364430603ED22 /* DownloadItem.swift */,
+				E0054F854AD89F8116DA8339 /* LocalMediaFile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8BAA9ED26F64CAEA84168990 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				4CA4687E6DB18C4841233107 /* VideoExtractor.swift */,
+				40698B1F2511796808054833 /* DownloadManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		25486B6C526EF2A81AB1B5C9 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				AD3F153F5B84A6F7E43C183D /* ShareSheet.swift */,
+				FCBEF0A172C0CAA66095124E /* VideoPlayerView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		575E908655668B293FC62796 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				DE6DA242110FD4C5D2DE7E79 /* MainView.swift */,
+				CC4DE5DFF2F7F728D1D3A4FE /* HomeDownloadView.swift */,
+				11E3F9F9A99FF66DC986F925 /* DownloadsListView.swift */,
+				EDD3C65DBC38795D1BD81D17 /* WebSnifferView.swift */,
+				85E0CC807565B275A206BE43 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		35310B5F7B58757F6BE08114 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				844CEB136277C07ADA98B838 /* Info.plist */,
+				A8DB0280B057574E974D8792 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		1BABC9FE70385367B81EC546 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ACE032DFB99281B9C6BDD23F /* Vdown.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9B669BFFE9FFF9D85C70A2E0 /* Vdown */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F62369FB915143384972F539 /* Build configuration list for PBXNativeTarget "Vdown" */;
+			buildPhases = (
+				9CD1113D1A0440D90EF379BC /* Sources */,
+				C92DD416700C675A2583C93A /* Frameworks */,
+				5D678E4AC7BCF177A1D9373C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Vdown;
+			productName = Vdown;
+			productReference = ACE032DFB99281B9C6BDD23F /* Vdown.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		81856875B53F7355A67CB05B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+					9B669BFFE9FFF9D85C70A2E0 = {
+						CreatedOnToolsVersion = 15.0;
+					};
+				};
+			};
+			buildConfigurationList = 877A59C8A2B3DE9D57625958 /* Build configuration list for PBXProject "Vdown" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 016E5C04A36B9E44ADA45781;
+			productRefGroup = 1BABC9FE70385367B81EC546 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9B669BFFE9FFF9D85C70A2E0 /* Vdown */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5D678E4AC7BCF177A1D9373C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD60B18F35740E63C7036C05 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9CD1113D1A0440D90EF379BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				854B485CFEE1A71381964CE0 /* VdownApp.swift in Sources */,
+				8A0C9AC615A5429CEBBE5078 /* VideoQuality.swift in Sources */,
+				D4ABE8B15AE0655A05C197D4 /* DownloadItem.swift in Sources */,
+				FA87BE9859F911D11C9809DC /* LocalMediaFile.swift in Sources */,
+				D33C5F4825743F2FF2DC94F7 /* VideoExtractor.swift in Sources */,
+				6A304985EAEC7806F7087691 /* DownloadManager.swift in Sources */,
+				CC06AA9255032224573D4CDC /* ShareSheet.swift in Sources */,
+				BF8C8ACE90B831C1CDEC9815 /* VideoPlayerView.swift in Sources */,
+				7FA9C6AC1A992C0FC8C293BF /* MainView.swift in Sources */,
+				E04FA10A44AA3BB07A78113D /* HomeDownloadView.swift in Sources */,
+				E728A8D9C735D174D7E9CD51 /* DownloadsListView.swift in Sources */,
+				5C5D97FC714406C8968947BE /* WebSnifferView.swift in Sources */,
+				F105AAADBF633898E9BCC064 /* SettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E4BDAE30782DA8F8C59F7D88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		8D959795B0191A683DACC9BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B29A462C53F177E42554E366 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Vdown/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kenny.vdown;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E4DE6061913151686BECED63 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				AD_HOC_CODE_SIGNING_ALLOWED = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Vdown/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kenny.vdown;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		877A59C8A2B3DE9D57625958 /* Build configuration list for PBXProject "Vdown" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4BDAE30782DA8F8C59F7D88 /* Debug */,
+				8D959795B0191A683DACC9BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F62369FB915143384972F539 /* Build configuration list for PBXNativeTarget "Vdown" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B29A462C53F177E42554E366 /* Debug */,
+				E4DE6061913151686BECED63 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+	};
+	rootObject = 81856875B53F7355A67CB05B /* Project object */;
+}
