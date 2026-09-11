@@ -11,6 +11,8 @@ class DownloadManager: NSObject, ObservableObject, URLSessionDownloadDelegate {
     @Published var localFiles: [LocalMediaFile] = []
     @Published var errorMessage: String?
     @Published var downloadSuccessAlert: Bool = false
+    @Published var selectedTab: Int = 0
+    @Published var snifferURL: String = ""
 
     private var session: URLSession!
     private var downloadTask: URLSessionDownloadTask?

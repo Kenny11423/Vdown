@@ -2,10 +2,9 @@ import SwiftUI
 
 struct MainView: View {
     @ObservedObject var downloadManager = DownloadManager.shared
-    @State private var selectedTab: Int = 0
 
     var body: some View {
-        TabView(selection: $selectedTab) {
+        TabView(selection: $downloadManager.selectedTab) {
             HomeDownloadView()
                 .tabItem {
                     Label("Downloader", systemImage: "arrow.down.circle.fill")

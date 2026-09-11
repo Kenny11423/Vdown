@@ -2,8 +2,11 @@ import SwiftUI
 
 struct SettingsView: View {
     @ObservedObject var downloadManager = DownloadManager.shared
-    @AppStorage("vdown_api_endpoint") private var apiEndpoint: String = "https://api.cobalt.tools/api/json"
+    @AppStorage("vdown_api_endpoint") private var apiEndpoint: String = "https://api.cobalt.liubquanti.click/"
+    @AppStorage("vdown_api_key") private var apiKey: String = ""
     @State private var showClearConfirmation: Bool = false
+    @State private var testStatusMessage: String?
+    @State private var isTestingAPI: Bool = false
 
     var body: some View {
         NavigationView {
@@ -45,14 +48,43 @@ struct SettingsView: View {
                 }
 
                 // API Endpoint Section
-                Section(header: Text("Stream Extraction API"), footer: Text("Vdown uses this API endpoint to resolve video and audio streams from media platforms. You can supply your own self-hosted backend.")) {
+                Section(
+                    header: Text("Stream Extraction API"),
+                    footer: Text("Vdown uses this API endpoint to resolve video streams. If empty or failing, automatic public fallbacks are used. You can also provide an API Key if your instance requires JWT/auth.")
+                ) {
                     TextField("API Endpoint URL", text: $apiEndpoint)
                         .autocapitalization(.none)
                         .disableAutocorrection(true)
                         .font(.footnote)
 
-                    Button("Reset to Default API") {
-                        apiEndpoint = "https://api.cobalt.tools/api/json"
+                    SecureField("API Key / Bearer Token (Optional)", text: $apiKey)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .font(.footnote)
+
+                    HStack {
+                        Button("Reset Default") {
+                            apiEndpoint = "https://api.cobalt.liubquanti.click/"
+                            apiKey = ""
+                        }
+
+                        Spacer()
+
+                        Button(action: testConnection) {
+                            if isTestingAPI {
+                                ProgressView()
+                                    .scaleEffect(0.8)
+                            } else {
+                                Text("Test Connection")
+                            }
+                        }
+                        .disabled(isTestingAPI)
+                    }
+
+                    if let status = testStatusMessage {
+                        Text(status)
+                            .font(.caption)
+                            .foregroundColor(status.contains("OK") ? .green : .red)
                     }
                 }
 
@@ -115,6 +147,46 @@ struct SettingsView: View {
                     downloadManager.clearAllFiles()
                 }
                 Button("Cancel", role: .cancel) {}
+            }
+        }
+    }
+
+    private func testConnection() {
+        guard let url = URL(string: apiEndpoint.hasSuffix("/") ? apiEndpoint : "\(apiEndpoint)/") else {
+            testStatusMessage = "Invalid URL syntax"
+            return
+        }
+
+        isTestingAPI = true
+        testStatusMessage = nil
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.timeoutInterval = 8.0
+        if !apiKey.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            let key = apiKey.trimmingCharacters(in: .whitespacesAndNewlines)
+            request.setValue("Bearer \(key)", forHTTPHeaderField: "Authorization")
+            request.setValue(key, forHTTPHeaderField: "Api-Key")
+        }
+
+        Task {
+            do {
+                let (_, response) = try await URLSession.shared.data(for: request)
+                await MainActor.run {
+                    self.isTestingAPI = false
+                    if let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) {
+                        self.testStatusMessage = "Connection OK! (HTTP \(http.statusCode))"
+                    } else if let http = response as? HTTPURLResponse {
+                        self.testStatusMessage = "Failed: HTTP \(http.statusCode)"
+                    } else {
+                        self.testStatusMessage = "No response from server."
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.isTestingAPI = false
+                    self.testStatusMessage = "Error: \(error.localizedDescription)"
+                }
             }
         }
     }

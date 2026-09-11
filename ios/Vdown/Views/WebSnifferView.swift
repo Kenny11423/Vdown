@@ -110,7 +110,18 @@ struct WebSnifferView: View {
                 detectedStreamsList
             }
             .onAppear {
-                if webView.url == nil {
+                if !downloadManager.snifferURL.isEmpty {
+                    urlInput = downloadManager.snifferURL
+                    downloadManager.snifferURL = ""
+                    loadURL()
+                } else if webView.url == nil {
+                    loadURL()
+                }
+            }
+            .onChange(of: downloadManager.snifferURL) { newUrl in
+                if !newUrl.isEmpty {
+                    urlInput = newUrl
+                    downloadManager.snifferURL = ""
                     loadURL()
                 }
             }

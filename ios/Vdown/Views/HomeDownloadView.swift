@@ -195,6 +195,51 @@ struct HomeDownloadView: View {
                         .padding(.horizontal)
                     }
 
+                    // Error Card with Quick Browser Fix
+                    if let err = downloadManager.errorMessage {
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.red)
+                                Text("Download Notice")
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.red)
+                                Spacer()
+                                Button(action: { downloadManager.errorMessage = nil }) {
+                                    Image(systemName: "xmark")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+
+                            Text(err)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+
+                            Button(action: {
+                                downloadManager.snifferURL = urlString
+                                downloadManager.selectedTab = 1
+                            }) {
+                                HStack {
+                                    Image(systemName: "safari.fill")
+                                    Text("Open in In-App Browser to Capture")
+                                        .fontWeight(.semibold)
+                                }
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                            }
+                        }
+                        .padding(14)
+                        .background(Color.red.opacity(0.08))
+                        .cornerRadius(12)
+                        .padding(.horizontal)
+                    }
+
                     // Cloudflare / Web hint card
                     VStack(alignment: .leading, spacing: 8) {
                         HStack {
