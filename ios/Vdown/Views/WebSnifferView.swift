@@ -142,8 +142,12 @@ struct WebSnifferView: View {
                             HStack {
                                 Button(action: {
                                     if let url = URL(string: stream) {
-                                        downloadManager.startDownload(url: url, quality: .best, isAudio: false)
+                                        let isAudio = stream.contains("mime=audio") || stream.contains(".mp3") || stream.contains(".m4a")
+                                        let ext = isAudio ? "mp3" : "mp4"
+                                        let cleanName = "WebStream_\(Int(Date().timeIntervalSince1970)).\(ext)"
+                                        downloadManager.startDirectDownload(url: url, filename: cleanName)
                                         showDetectedSheet = false
+                                        downloadManager.selectedTab = 0
                                     }
                                 }) {
                                     Text("Download Stream")

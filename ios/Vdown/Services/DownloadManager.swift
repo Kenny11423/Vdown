@@ -22,6 +22,12 @@ class DownloadManager: NSObject, ObservableObject, URLSessionDownloadDelegate {
 
     override init() {
         super.init()
+        // Migrate away from broken official domain if stored in UserDefaults
+        let currentEndpoint = UserDefaults.standard.string(forKey: "vdown_api_endpoint") ?? ""
+        if currentEndpoint.isEmpty || currentEndpoint.contains("api.cobalt.tools") {
+            UserDefaults.standard.set("https://api.cobalt.liubquanti.click/", forKey: "vdown_api_endpoint")
+        }
+
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 60
         config.timeoutIntervalForResource = 3600
@@ -36,6 +42,24 @@ class DownloadManager: NSObject, ObservableObject, URLSessionDownloadDelegate {
             try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         }
         return dir
+    }
+
+    func startDirectDownload(url: URL, filename: String = "video.mp4") {
+        guard !isDownloading else { return }
+        errorMessage = nil
+        isDownloading = true
+        expectedFilename = filename
+
+        let isAudio = filename.lowercased().hasSuffix(".mp3")
+        var item = DownloadItem(url: url, title: filename, quality: .best, isAudioOnly: isAudio)
+        item.status = .downloading
+        self.activeItem = item
+        self.lastSpeedCheckDate = Date()
+        self.bytesSinceLastCheck = 0
+
+        let task = self.session.downloadTask(with: url)
+        self.downloadTask = task
+        task.resume()
     }
 
     func startDownload(url: URL, quality: VideoQuality, isAudio: Bool, customName: String? = nil) {

@@ -9,48 +9,99 @@ struct ExtractedMedia {
 class VideoExtractor {
     static let shared = VideoExtractor()
 
-    private let directExtensions = [
-        "mp4", "m4v", "mov", "mkv", "webm", "avi",
-        "mp3", "m4a", "aac", "wav", "flac", "ogg", "opus"
-    ]
-
     private let fallbackEndpoints = [
         "https://api.cobalt.liubquanti.click/",
-        "https://melon.clxxped.lol/",
-        "https://api.cobalt.tools/"
+        "https://melon.clxxped.lol/"
     ]
+
+    func isDirectStreamURL(_ url: URL) -> Bool {
+        let str = url.absoluteString.lowercased()
+        let path = url.path.lowercased()
+
+        let mediaExtensions = [
+            ".mp4", ".m4v", ".mov", ".mkv", ".webm", ".avi",
+            ".mp3", ".m4a", ".aac", ".wav", ".flac", ".ogg", ".opus", ".m3u8"
+        ]
+        for ext in mediaExtensions {
+            if path.hasSuffix(ext) || str.contains("\(ext)?") || str.contains("\(ext)&") || str.contains("\(ext)/") {
+                return true
+            }
+        }
+
+        if str.contains("googlevideo.com") ||
+           str.contains("videoplayback") ||
+           str.contains("mime=video") ||
+           str.contains("mime=audio") ||
+           str.contains("video.twimg.com") ||
+           str.contains("fbcdn.net") ||
+           str.contains("cdninstagram.com") ||
+           str.contains("tiktokcdn.com") ||
+           str.contains("byteoversea.com") ||
+           str.contains("v.redd.it") {
+            return true
+        }
+
+        return false
+    }
+
+    private func checkContentTypeIsMedia(_ url: URL) async -> Bool {
+        var req = URLRequest(url: url)
+        req.httpMethod = "HEAD"
+        req.timeoutInterval = 4.0
+        req.setValue("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15", forHTTPHeaderField: "User-Agent")
+        if let (_, res) = try? await URLSession.shared.data(for: req),
+           let http = res as? HTTPURLResponse,
+           let mime = http.value(forHTTPHeaderField: "Content-Type")?.lowercased() {
+            if mime.hasPrefix("video/") || mime.hasPrefix("audio/") || mime.contains("mpegurl") || mime.contains("mp4") {
+                return true
+            }
+        }
+        return false
+    }
 
     func extract(
         from sourceURL: URL,
         quality: VideoQuality,
         customEndpoint: String? = nil
     ) async throws -> ExtractedMedia {
-        let pathExtension = sourceURL.pathExtension.lowercased()
-        let filenameFromURL = sourceURL.deletingPathExtension().lastPathComponent
+        // Case 1: Direct stream URL (CDN, googlevideo, mp4, etc.)
+        let isDirect = isDirectStreamURL(sourceURL) || await checkContentTypeIsMedia(sourceURL)
+        if isDirect {
+            let str = sourceURL.absoluteString.lowercased()
+            let pathExtension = sourceURL.pathExtension.lowercased()
+            let isAudio = str.contains("mime=audio") || ["mp3", "m4a", "aac", "wav", "flac", "ogg", "opus"].contains(pathExtension)
+            let ext = isAudio ? "mp3" : "mp4"
 
-        // Case 1: Direct link to media file
-        if directExtensions.contains(pathExtension) {
-            let cleanTitle = filenameFromURL.isEmpty ? "video" : filenameFromURL
-            let finalName = "\(cleanTitle).\(pathExtension)"
+            let lastPart = sourceURL.deletingPathExtension().lastPathComponent
+            let baseTitle: String
+            if lastPart.isEmpty || lastPart == "videoplayback" || lastPart.count > 40 {
+                baseTitle = "Stream_\(Int(Date().timeIntervalSince1970))"
+            } else {
+                baseTitle = lastPart
+            }
+
+            let finalName = "\(baseTitle).\(ext)"
             return ExtractedMedia(
                 downloadURL: sourceURL,
                 filename: sanitizeFilename(finalName),
-                isAudio: ["mp3", "m4a", "aac", "wav", "flac", "ogg", "opus"].contains(pathExtension)
+                isAudio: isAudio
             )
         }
 
-        // Case 2: Resolve stream via Cobalt v10/v11 API
+        // Case 2: Standard website link (YouTube, TikTok, Facebook, etc.) -> Resolve via Cobalt v10/v11 API
         var endpointsToTry: [String] = []
 
-        // Custom endpoint from user configuration
+        let customApiKey = UserDefaults.standard.string(forKey: "vdown_api_key")?.trimmingCharacters(in: .whitespacesAndNewlines)
         let userConfigured = customEndpoint?.trimmingCharacters(in: .whitespacesAndNewlines)
             ?? UserDefaults.standard.string(forKey: "vdown_api_endpoint")?.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if let custom = userConfigured, !custom.isEmpty {
-            endpointsToTry.append(ensureTrailingSlash(custom))
+            // If user has old api.cobalt.tools without API key, don't use it
+            if !custom.contains("api.cobalt.tools") || (customApiKey != nil && !customApiKey!.isEmpty) {
+                endpointsToTry.append(ensureTrailingSlash(custom))
+            }
         }
 
-        // Add fallbacks
         for fb in fallbackEndpoints {
             if !endpointsToTry.contains(fb) {
                 endpointsToTry.append(fb)
@@ -69,7 +120,6 @@ class VideoExtractor {
         case .audioOnly: qualityParam = "128"
         }
 
-        // Standard Cobalt v10 / v11 schema
         let downloadMode = quality.isAudio ? "audio" : "auto"
         let requestPayload: [String: Any] = [
             "url": sourceURL.absoluteString,
@@ -82,8 +132,6 @@ class VideoExtractor {
         guard let payloadData = try? JSONSerialization.data(withJSONObject: requestPayload) else {
             throw NSError(domain: "VdownExtractor", code: 400, userInfo: [NSLocalizedDescriptionKey: "Failed to construct request payload."])
         }
-
-        let customApiKey = UserDefaults.standard.string(forKey: "vdown_api_key")?.trimmingCharacters(in: .whitespacesAndNewlines)
 
         for endpointStr in endpointsToTry {
             guard let apiURL = URL(string: endpointStr) else { continue }
@@ -140,7 +188,6 @@ class VideoExtractor {
                         }
                     }
                 } else {
-                    // Try parsing JSON error code from 4xx/5xx response
                     if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                        let errorObj = json["error"] as? [String: Any],
                        let code = errorObj["code"] as? String {
@@ -158,7 +205,7 @@ class VideoExtractor {
         throw NSError(
             domain: "VdownExtractor",
             code: 400,
-            userInfo: [NSLocalizedDescriptionKey: "\(desc). Tip: Tap 'Open in Browser' to capture the video directly!"]
+            userInfo: [NSLocalizedDescriptionKey: "\(desc). Tap 'Open in Browser' below to capture the video directly!"]
         )
     }
 
