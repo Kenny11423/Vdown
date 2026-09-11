@@ -14,7 +14,7 @@ struct HomeDownloadView: View {
                 VStack(spacing: 20) {
                     // Hero Banner
                     VStack(spacing: 8) {
-                        Image(systemName: "arrow.down.to.line.circle.fill")
+                        Image(systemName: "arrow.down.circle.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 56, height: 56)

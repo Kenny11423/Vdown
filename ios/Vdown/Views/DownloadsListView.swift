@@ -5,7 +5,7 @@ struct DownloadsListView: View {
     @ObservedObject var downloadManager = DownloadManager.shared
     @State private var searchText: String = ""
     @State private var filterMode: Int = 0 // 0: All, 1: Videos, 2: Audio
-    @State private var playingMediaURL: URL?
+    @State private var playingMedia: PlayableMedia?
     @State private var sharingFile: LocalMediaFile?
     @State private var saveAlertMessage: String?
     @State private var showSaveAlert: Bool = false
@@ -71,8 +71,8 @@ struct DownloadsListView: View {
                     }
                 }
             }
-            .sheet(item: $playingMediaURL) { url in
-                VideoPlayerView(url: url)
+            .sheet(item: $playingMedia) { media in
+                VideoPlayerView(url: media.url)
             }
             .sheet(item: $sharingFile) { file in
                 ShareSheet(activityItems: [file.fileURL])
@@ -115,7 +115,7 @@ struct DownloadsListView: View {
             Spacer()
 
             Menu {
-                Button(action: { playingMediaURL = file.fileURL }) {
+                Button(action: { playingMedia = PlayableMedia(url: file.fileURL) }) {
                     Label("Play / View", systemImage: "play.circle")
                 }
 
@@ -143,7 +143,7 @@ struct DownloadsListView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            playingMediaURL = file.fileURL
+            playingMedia = PlayableMedia(url: file.fileURL)
         }
     }
 
@@ -184,7 +184,7 @@ struct DownloadsListView: View {
     }
 }
 
-// Extension to make URL Identifiable for sheet presentation
-extension URL: Identifiable {
-    public var id: String { absoluteString }
+struct PlayableMedia: Identifiable {
+    let id = UUID()
+    let url: URL
 }
