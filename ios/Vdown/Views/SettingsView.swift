@@ -151,6 +151,7 @@ struct SettingsView: View {
         }
     }
 
+    @MainActor
     private func testConnection() {
         guard let url = URL(string: apiEndpoint.hasSuffix("/") ? apiEndpoint : "\(apiEndpoint)/") else {
             testStatusMessage = "Invalid URL syntax"
@@ -172,21 +173,17 @@ struct SettingsView: View {
         Task {
             do {
                 let (_, response) = try await URLSession.shared.data(for: request)
-                await MainActor.run {
-                    self.isTestingAPI = false
-                    if let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) {
-                        self.testStatusMessage = "Connection OK! (HTTP \(http.statusCode))"
-                    } else if let http = response as? HTTPURLResponse {
-                        self.testStatusMessage = "Failed: HTTP \(http.statusCode)"
-                    } else {
-                        self.testStatusMessage = "No response from server."
-                    }
+                isTestingAPI = false
+                if let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) {
+                    testStatusMessage = "Connection OK! (HTTP \(http.statusCode))"
+                } else if let http = response as? HTTPURLResponse {
+                    testStatusMessage = "Failed: HTTP \(http.statusCode)"
+                } else {
+                    testStatusMessage = "No response from server."
                 }
             } catch {
-                await MainActor.run {
-                    self.isTestingAPI = false
-                    self.testStatusMessage = "Error: \(error.localizedDescription)"
-                }
+                isTestingAPI = false
+                testStatusMessage = "Error: \(error.localizedDescription)"
             }
         }
     }

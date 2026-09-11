@@ -118,7 +118,7 @@ struct WebSnifferView: View {
                     loadURL()
                 }
             }
-            .onChange(of: downloadManager.snifferURL) { newUrl in
+            .onReceive(downloadManager.$snifferURL) { newUrl in
                 if !newUrl.isEmpty {
                     urlInput = newUrl
                     downloadManager.snifferURL = ""

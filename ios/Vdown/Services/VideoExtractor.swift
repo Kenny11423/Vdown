@@ -65,7 +65,10 @@ class VideoExtractor {
         customEndpoint: String? = nil
     ) async throws -> ExtractedMedia {
         // Case 1: Direct stream URL (CDN, googlevideo, mp4, etc.)
-        let isDirect = isDirectStreamURL(sourceURL) || await checkContentTypeIsMedia(sourceURL)
+        var isDirect = isDirectStreamURL(sourceURL)
+        if !isDirect {
+            isDirect = await checkContentTypeIsMedia(sourceURL)
+        }
         if isDirect {
             let str = sourceURL.absoluteString.lowercased()
             let pathExtension = sourceURL.pathExtension.lowercased()
