@@ -1,2 +1,2 @@
-yt-dlp>=2026.1.0
-mutagen>=1.48.0
+yt-dlp
+mutagen

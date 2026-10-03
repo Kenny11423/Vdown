@@ -41,11 +41,20 @@ if [ "$IS_ISH" -eq 1 ]; then
 
     # Install Python dependencies
     echo "Installing Python dependencies (yt-dlp, mutagen)..."
-    if pip install --break-system-packages -r "$SCRIPT_DIR/requirements.txt" 2>/dev/null; then
+    if pip install --break-system-packages -r "$SCRIPT_DIR/requirements.txt"; then
+        echo "Dependencies installed with pip."
+    elif pip3 install --break-system-packages -r "$SCRIPT_DIR/requirements.txt"; then
+        echo "Dependencies installed with pip3."
+    elif pip install -r "$SCRIPT_DIR/requirements.txt"; then
         echo "Dependencies installed with pip."
     else
-        python3 -m venv "$SCRIPT_DIR/venv"
-        "$SCRIPT_DIR/venv/bin/pip" install -r "$SCRIPT_DIR/requirements.txt"
+        echo "Creating virtual environment for dependencies..."
+        python3 -m venv "$SCRIPT_DIR/venv" || true
+        if [ -f "$SCRIPT_DIR/venv/bin/pip" ]; then
+            "$SCRIPT_DIR/venv/bin/pip" install -r "$SCRIPT_DIR/requirements.txt"
+        else
+            pip3 install -r "$SCRIPT_DIR/requirements.txt" || pip install -r "$SCRIPT_DIR/requirements.txt"
+        fi
     fi
 
     # Link executable to /usr/local/bin or /usr/bin
